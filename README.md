@@ -4,22 +4,20 @@
 
 ## Short summary
 
-This task requires participants to predict the outcome of grant applications for the University of Melbourne.
+This task requires participants to predict if a Titanic passenger will survive or not to the sank of the Titanic based on some passenger's features.
 
 ## Methodology
 
-I started by cleaning the dataset as it was not amenable for study in the current state. Each row contained 15 columns that were repeated 15 times (225 columns). Each block consisted of information regarding a researcher and each row consisted of one application that included up to 15 researchers.
+I started by exploring the dataset in order to get some insights about each features. Some visualizations helped me to notice some interesting patterns like the strong correlation between the class or sex of a passenger with the chance of survival.
 
-I started by splitting these blocks and creating a new dataframe with one line per researcher. This made it much easier to  "group by" and create new columns.
+After this exploration phase I started to clean the data by changing the non-numerical features into numerical features (needed for machine learning to make sense of the data). Then I dealt with the missing values for each features. For the port of embarkation, I replaced the few missing values with the most frequent port of embarkation; for the age, I grouped the dataframe by class and sex and replaced the misisng values in each subgroups by the median of each subgroup; for the fare, I replaced by the mean value. I also created a new feature "Family size" that gives the number family relatives on board for each passenger (sum of 'SibSp and Parch'). Finally, I dropped the columns that were either irrelevant for the machine learning model or that had been transformed into numerical values.
 
-I then started to explore each feature (column) and compiled new column from the existing ones. For non-numerical variables, I either got dummies out of it or created categorical variables.
 
-Once I got a proper dataset with valuable columns (close to 100 features in the end), I then applied a random forest model to it. The result was good with a AUC scoring of 94%.
+With this clean dataset, I applied a Gradient Boosting classifier from scikit-learn library. I did a grid-search on three hyper-parameters (learning rate, max_depth and n_estimators) and got the best model with an accuracy score of 82% for a learning rate of 0.01, max_depth of 3 and n_estimators of 300. This accuracy score is on the mean of cross validation sets created by the grid search process (By default, the GridSearchCV's cross validation uses 3-fold KFold).
 
 ## Files details
 
-- data folder: datasets used
-- data_wrangling.py and data_wrangling2.py: are the python code for cleaning the data set. Running data_wrangling.py returns a new dataframe that will be used for the machine learning.
-- Machine Learning.ipynb: this notebook contains our machine learning code (random forest with scoring)
-- other files: drafts notebooks used during first exploration of the data
-# Titanic-ML
+- train.csv: dataset used for training
+- test.csv: dataset used for final prediction
+- results-rf.csv: dataframe with only two columns (passgenr ID and survived). Used for submission on Kaggle website.
+- Titanic.ipynb: Jupyter notebook with all the code for data exploration, data visualization, data cleaning and machine learning.
